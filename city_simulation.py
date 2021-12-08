@@ -20,7 +20,7 @@ lossList = [1, 0]
 bus_spended_energy = 0
 distance = 0
 passanger = 0
-year = 1
+year = 5
 DAILY_PASSANGER = []
 DAILY_DISTANCE = []
 DAILY_GAINED_ENERGY = []
@@ -32,7 +32,7 @@ TOTAL_SPENDED_MONEY = 1
 TOTAL_LOSS_PANEL = 0
 TOTAL_LOSS_BUSS = 0
 count = 0
-for daysIndex in range(1, 365 * year): 
+for daysIndex in range(1, 365 * year):
 
     battery_capacity = battery.getBatteryCapacity() * battery.getBatteryNum()
     print("capacity", battery_capacity)
@@ -42,14 +42,14 @@ for daysIndex in range(1, 365 * year):
             TOTAL_PASSANGER += index.getBusPassengerNum()
             distance += index.getRoadDistance()
             passanger += index.getBusPassengerNum()
- 
+
         TOTAL_SPENDED_ENERGY += bus_spended_energy
         if(21 > hoursIndex > 8):  # solar_panel_status = "on"
             energy_daily = panel.getPanelEarningEnergy() * panel.getPanelNumber()
-   
+
             TOTAL_GAINED_ENERGY += panel.getPanelEarningEnergy() * panel.getPanelNumber()
             DAILY_GAINED_ENERGY.append(
-                panel.getPanelEarningEnergy() * panel.getPanelNumber()) 
+                panel.getPanelEarningEnergy() * panel.getPanelNumber())
             if(energy_daily - bus_spended_energy > 0):
                 if(battery_capacity < energy_daily - bus_spended_energy):
                     battery_balance += energy_daily - bus_spended_energy
@@ -59,15 +59,15 @@ for daysIndex in range(1, 365 * year):
                 print("Low Battery Daily")
                 count += 1/24
         else:  # solar_panel_status = "off"
- 
+
             if(not battery_balance-bus_spended_energy <= 0):
                 battery_balance -= bus_spended_energy
                 print()
-                print("hours:",hoursIndex)
+                print("hours:", hoursIndex)
                 print("Bus Spended::    ", bus_spended_energy)
                 print("Battery Balance: ", battery_balance)
                 print("Battert Capacity:", battery_capacity)
-                print("Average balance: ", battery_balance - bus_spended_energy) 
+                print("Average balance: ", battery_balance - bus_spended_energy)
                 print()
                 print()
             else:
@@ -108,9 +108,25 @@ print("Total Battery Capacity:", battery.getBatteryCapacity()
 print("Total Gained Energy:   ", TOTAL_GAINED_ENERGY, "Kw/h")
 print("Total Spended Energy:  ", TOTAL_SPENDED_ENERGY, "Kw/h")
 print("Balance:               ", TOTAL_GAINED_ENERGY - TOTAL_SPENDED_ENERGY, "Kw")
+print()
 print("Total Passangers:      ", TOTAL_PASSANGER, "Person")
 print("Total Lost Solar Panels", TOTAL_LOSS_PANEL, "Peaces")
 print("Total Lost Busses      ", TOTAL_LOSS_BUSS, "Peaces")
+print()
+cost1 = oneBus.getTotalBusNum() * oneBus.bus_value
+cost2 = panel.getPanelNumber() * panel.panel_value
+cost3 = (TOTAL_LOSS_BUSS * oneBus.bus_value) + \
+    (TOTAL_LOSS_PANEL * panel.panel_value)
+print("Total Bus Cost:        ", cost1, "usd")
+print("Total Solar Panel Cost:", cost2, "usd")
+print("Total Loss Cost        ", cost3, "usd")
+
+print("Total earned service money:", TOTAL_PASSANGER *
+      1.5, "Usd (1.5 usd for a ticket)")
+
+money_balance = cost1 + cost2 + cost3
+print("Total Spended Money:   ", money_balance * -1)
+print("Money Balance:         ", ((TOTAL_PASSANGER * 1.5) - money_balance))
 
 
 print()
@@ -119,12 +135,12 @@ dailyCount = 0
 for i in DAILY_GAINED_ENERGY:
     dailyCount += i
 print("Average Gained energy             ",
-      dailyCount / len(DAILY_GAINED_ENERGY)*10 )
+      dailyCount / len(DAILY_GAINED_ENERGY)*10)
 dailyCount = 0
 for i in DAILY_SPENDED_ENERGY:
     dailyCount += i
 print("Average Spended energy            ",
-      dailyCount / len(DAILY_SPENDED_ENERGY)*24 )
+      dailyCount / len(DAILY_SPENDED_ENERGY)*24)
 dailyCount = 0
 for i in DAILY_PASSANGER:
     dailyCount += i
@@ -137,4 +153,3 @@ print("Average Total Distance            ", dailyCount / len(DAILY_DISTANCE))
 print()
 print()
 print()
- 
